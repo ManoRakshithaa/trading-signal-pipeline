@@ -23,7 +23,7 @@ def setup_logging(log_file: str) -> logging.Logger:
     fh.setFormatter(fmt)
     logger.addHandler(fh)
 
-    sh = logging.StreamHandler(sys.stdout)
+    sh = logging.StreamHandler(sys.stderr)
     sh.setFormatter(fmt)
     logger.addHandler(sh)
 
@@ -32,7 +32,7 @@ def setup_logging(log_file: str) -> logging.Logger:
 
 def write_metrics(output_path: str, payload: dict):
     with open(output_path, "w") as f:
-        print(json.dumps(metrics))
+        json.dump(payload, f, indent=2)
 
 
 def load_config(config_path: str) -> dict:
@@ -120,7 +120,7 @@ def run(args):
         logger.info(f"Metrics written to {args.output}")
         logger.info(f"Job completed successfully. Status: success")
 
-        print(json.dumps(metrics, indent=2))
+        print(json.dumps(metrics))
         sys.exit(0)
 
     except Exception as e:
@@ -133,7 +133,7 @@ def run(args):
             "error_message": str(e)
         }
         write_metrics(args.output, error_payload)
-        print(json.dumps(error_payload, indent=2))
+        print(json.dumps(error_payload))
         sys.exit(1)
 
 
