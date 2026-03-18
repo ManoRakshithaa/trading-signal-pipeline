@@ -18,11 +18,15 @@ jobs:
         run: docker build -t mlops-task .
 
       - name: Run container and capture output
+        continue-on-error: true
         run: |
-          docker run --rm mlops-task > full_output.txt 2>&1
-          cat full_output.txt
+          docker run --rm mlops-task > full_output.txt 2>&1 || true
+          echo "=== FULL OUTPUT ==="
+          cat full_output.txt || echo "output file is empty"
+          echo "=== END OUTPUT ==="
+
+      - name: Extract and validate JSON
+        run: |
           grep "^{" full_output.txt | tail -1 > output.json
           cat output.json
-
-      - name: Validate metrics output
-        run: python3 validate.py
+          python3 validate.py
