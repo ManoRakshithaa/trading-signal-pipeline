@@ -23,10 +23,4 @@ jobs:
           cat output.json
 
       - name: Validate metrics output
-        run: |
-          python3 -c "
-          import json, sys
-          with open('output.json') as f:
-              data = json.load(f)
-          assert data['status'] == 'success', f'Expected success, got {data[\"status\"]}'
-          assert data['rows_processed'] == 9996, f'Expected 9996, got
+        run: python3 validate.py
