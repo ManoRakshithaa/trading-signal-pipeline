@@ -32,7 +32,7 @@ def setup_logging(log_file: str) -> logging.Logger:
 
 def write_metrics(output_path: str, payload: dict):
     with open(output_path, "w") as f:
-        json.dump(payload, f, indent=2)
+        print(json.dumps(metrics))
 
 
 def load_config(config_path: str) -> dict:
@@ -81,7 +81,7 @@ def run(args):
     logger = setup_logging(args.log_file)
     start_time = time.time()
     logger.info(f"Job started at {datetime.now(timezone.utc).isoformat()}Z")
-    
+
     version = "unknown"
 
     try:

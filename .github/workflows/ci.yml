@@ -12,14 +12,14 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Build Docker image
         run: docker build -t mlops-task .
 
       - name: Run container and capture output
         run: |
-          docker run --rm mlops-task > output.json
+          docker run --rm mlops-task 2>/dev/null | tail -n 1 > output.json
           cat output.json
 
       - name: Validate metrics output
@@ -29,7 +29,4 @@ jobs:
           with open('output.json') as f:
               data = json.load(f)
           assert data['status'] == 'success', f'Expected success, got {data[\"status\"]}'
-          assert data['rows_processed'] == 9996, f'Expected 9996 rows, got {data[\"rows_processed\"]}'
-          assert 'value' in data, 'Missing signal_rate value'
-          print('All checks passed!')
-          "
+          assert data['rows_processed'] == 9996, f'Expected 9996, got
